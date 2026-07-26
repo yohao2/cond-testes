@@ -380,7 +380,7 @@ def planilha_gas_bali(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bu
     wb['GAS'].title = (mes_referencia)
     salvar_no_dropbox(wb, f'B. /{nome_arquivo}.xlsx')
 
-esquerda, direita = st.columns(2)
+esquerda, direita = st.columns([2,1])
 
 with esquerda:
 
