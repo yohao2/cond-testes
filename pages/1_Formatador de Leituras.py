@@ -451,7 +451,6 @@ with direita:
     with centro:
         st.subheader('Leituras Anteriores')
 
-        listar_leituras(escolher_condominio)
 
 
         nova_leitura = st.text_area('Salvar nova leitura:')
