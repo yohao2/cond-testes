@@ -381,13 +381,20 @@ def planilha_gas_bali(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bu
     salvar_no_dropbox(wb, f'B. /{nome_arquivo}.xlsx')
 
 
-def salvar_leitura_nuvem(nome_arquivo, texto):
+def salvar_leitura_nuvem(nome_arquivo, texto, condominio):
 
-    dbx.files_upload(
-        texto.encode("utf-8"),
-        f"/Leituras/{nome_arquivo}.txt",
-        mode=dropbox.files.WriteMode.overwrite
-    )
+    if condominio == 'Residencial Ibiza':
+        dbx.files_upload(
+            texto.encode("utf-8"),
+            f"/Leituras/Ibiza/{nome_arquivo}.txt",
+            mode=dropbox.files.WriteMode.overwrite
+        )
+    if condominio == 'Residencial Bali':
+        dbx.files_upload(
+            texto.encode("utf-8"),
+            f"/Leituras/Bali/{nome_arquivo}.txt",
+            mode=dropbox.files.WriteMode.overwrite
+        )
 
 
 st.set_page_config(layout="wide")
@@ -426,7 +433,7 @@ with direita:
         salvar_leitura = st.button('Salvar')
 
         if salvar_leitura:
-            salvar_leitura_nuvem(nome_leitura, nova_leitura)
+            salvar_leitura_nuvem(nome_leitura, nova_leitura, escolher_condominio)
             
 
 
