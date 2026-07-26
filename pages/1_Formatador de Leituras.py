@@ -384,10 +384,7 @@ st.set_page_config(layout="wide")
 
 esquerda, direita = st.columns([2,1])
 
-st.title('teste')
-
 with esquerda:
-    st.title('teste')
 
     # selecionar condominios
     with st.sidebar:
