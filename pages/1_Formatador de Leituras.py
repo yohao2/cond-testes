@@ -495,4 +495,5 @@ with direita:
                     )
 
                     st.success("Leitura salva!")
+                    st.stop()
 
