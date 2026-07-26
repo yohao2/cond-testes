@@ -1,6 +1,30 @@
 import streamlit as st
 import openpyxl
+import dropbox
 from dados import condominios
+from io import BytesIO
+
+dbx = dropbox.Dropbox(st.secrets["DROPBOX_TOKEN"])
+
+def salvar_no_dropbox(wb, nome_arquivo):
+    # definindo bytesIO() como arquivo
+    # bytesIO: guarda os bytes do que for passado, nesse caso da planilha do excel
+    arquivo = BytesIO()
+
+    # salvando a planilha dentro de bytesIO
+    wb.save(arquivo)
+    # lendo o arquivo desde o inicio
+    arquivo.seek(0)
+
+    # salvar no dropbox
+    dbx.files_upload(
+        # passando o arquivo a ser salvo
+        arquivo.read(),
+        # qual o nome que o arquivo vai ter
+        nome_arquivo,
+        # definindo o que fazer, writemode: para escrever o arquivo no dropbox
+        mode=dropbox.files.WriteMode.add
+    )
 
 def leitura_ibiza():
     st.title('RESIDENCIAL IBIZA')
@@ -24,6 +48,8 @@ def leitura_ibiza():
         fatura = st.number_input('Valor da fatura (Com multa):')
         # definir valor da multa
         multa = st.number_input('Valor da multa (Deixe em branco caso não haja)')
+        # definir nome do arquivo
+        nome_arquivo_agua = st.text_input('Digite o nome que quer dar para o arquivo: ')
 
     if checkbox_gas:
         st.subheader('Gás')
@@ -36,6 +62,8 @@ def leitura_ibiza():
         # definir valores do bujao
         valor_bujao_unidade = st.number_input('Digite o valor UNITÁRIO do bujãos:')
         valor_bujao_total = st.number_input('Digite o valor TOTAL dos bujões:')
+        # definir nome do arquivo
+        nome_arquivo_gas = st.text_input('Digite o nome que quer dar para o arquivo:')
 
     st.write('---')
 
@@ -79,12 +107,12 @@ def leitura_ibiza():
             st.stop()
 
         if checkbox_agua:
-            if not data_agua or not fatura:
+            if not data_agua or not fatura or not nome_arquivo_agua:
                 st.write('Preencha todos os campos!')
                 st.stop()
 
         if checkbox_gas:
-            if not data_gas or not valor_bujao_unidade or not valor_bujao_total:
+            if not data_gas or not valor_bujao_unidade or not valor_bujao_total or not nome_arquivo_gas:
                 st.write('Preencha todos os campos!')
                 st.stop()
 
@@ -93,8 +121,8 @@ def leitura_ibiza():
             st.stop()
 
         st.write('Gerando planilhas...')
-        if checkbox_agua: planilha_agua_ibiza(dia_mes_agua, mes_referencia, fatura, multa, lista_agua)
-        if checkbox_gas: planilha_gas_ibiza(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bujao_total, lista_gas)
+        if checkbox_agua: planilha_agua_ibiza(dia_mes_agua, mes_referencia, fatura, multa, lista_agua, nome_arquivo_agua)
+        if checkbox_gas: planilha_gas_ibiza(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bujao_total, lista_gas, nome_arquivo_gas)
 
 def leitura_bali():
     st.title('RESIDENCIAL BALI')
@@ -118,6 +146,8 @@ def leitura_bali():
         fatura = st.number_input('Valor da fatura (Com multa):')
         # definir valor da multa
         multa = st.number_input('Valor da multa (Deixe em branco caso não haja)')
+        # definir nome do arquivo
+        nome_arquivo_agua = st.text_input('Digite o nome que quer dar para o arquivo: ')
 
     if checkbox_gas:
         st.subheader('Gás')
@@ -130,6 +160,8 @@ def leitura_bali():
         # definir valores do bujao
         valor_bujao_unidade = st.number_input('Digite o valor UNITÁRIO do bujãos:')
         valor_bujao_total = st.number_input('Digite o valor TOTAL dos bujões:')
+        # definir nome do arquivo
+        nome_arquivo_gas = st.text_input('Digite o nome que quer dar para o arquivo: ')
 
     st.write('---')
 
@@ -173,12 +205,12 @@ def leitura_bali():
             st.stop()
 
         if checkbox_agua:
-            if not data_agua or not fatura:
+            if not data_agua or not fatura or not nome_arquivo_agua:
                 st.write('Preencha todos os campos!')
                 st.stop()
 
         if checkbox_gas:
-            if not data_gas or not valor_bujao_unidade or not valor_bujao_total:
+            if not data_gas or not valor_bujao_unidade or not valor_bujao_total or not nome_arquivo_gas:
                 st.write('Preencha todos os campos!')
                 st.stop()
 
@@ -187,10 +219,10 @@ def leitura_bali():
             st.stop()
 
         st.write('Gerando planilhas...')
-        if checkbox_agua: planilha_agua_bali(dia_mes_agua, mes_referencia, fatura, multa, lista_agua)
-        if checkbox_gas: planilha_gas_bali(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bujao_total, lista_gas)
+        if checkbox_agua: planilha_agua_bali(dia_mes_agua, mes_referencia, fatura, multa, lista_agua, nome_arquivo_agua)
+        if checkbox_gas: planilha_gas_bali(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bujao_total, lista_gas, nome_arquivo_gas)
 
-def planilha_agua_ibiza(dia_mes_agua, mes_referencia, fatura, multa, lista_agua):
+def planilha_agua_ibiza(dia_mes_agua, mes_referencia, fatura, multa, lista_agua, nome_arquivo):
     wb = openpyxl.load_workbook('arquivos/AGUA IBIZA.xlsx')
     sheet = wb['AGUA']
 
@@ -237,9 +269,10 @@ def planilha_agua_ibiza(dia_mes_agua, mes_referencia, fatura, multa, lista_agua)
 
     # mudar nome da sheet
     wb['AGUA'].title = (mes_referencia)
-    wb.save('AGUA IBIZA FORMATADO.xlsx')
 
-def planilha_gas_ibiza(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bujao_total, lista_gas):
+    salvar_no_dropbox(wb, f'/I. {nome_arquivo}.xlsx')
+
+def planilha_gas_ibiza(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bujao_total, lista_gas, nome_arquivo):
     wb = openpyxl.load_workbook('arquivos/GAS IBIZA.xlsx')
     sheet = wb['GAS']
 
@@ -265,9 +298,9 @@ def planilha_gas_ibiza(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_b
 
     # mudar nome da sheet
     wb['GAS'].title = (mes_referencia)
-    wb.save('GAS IBIZA FORMATADO.xlsx')
+    salvar_no_dropbox(wb, f'/I. {nome_arquivo}.xlsx')
 
-def planilha_agua_bali(dia_mes_agua, mes_referencia, fatura, multa, lista_agua):
+def planilha_agua_bali(dia_mes_agua, mes_referencia, fatura, multa, lista_agua, nome_arquivo):
     wb = openpyxl.load_workbook('arquivos/AGUA BALI.xlsx')
     sheet = wb['AGUA']
 
@@ -314,9 +347,9 @@ def planilha_agua_bali(dia_mes_agua, mes_referencia, fatura, multa, lista_agua):
 
     # mudar nome da sheet
     wb['AGUA'].title = (mes_referencia)
-    wb.save('AGUA BALI FORMATADO.xlsx')
+    salvar_no_dropbox(wb, f'/B. {nome_arquivo}.xlsx')
 
-def planilha_gas_bali(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bujao_total, lista_gas):
+def planilha_gas_bali(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bujao_total, lista_gas, nome_arquivo):
     wb = openpyxl.load_workbook('arquivos/GAS BALI.xlsx')
     sheet = wb['GAS']
 
@@ -342,7 +375,7 @@ def planilha_gas_bali(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bu
 
     # mudar nome da sheet
     wb['GAS'].title = (mes_referencia)
-    wb.save('GAS BALI FORMATADO.xlsx')
+    salvar_no_dropbox(wb, f'B. /{nome_arquivo}.xlsx')
 
 # selecionar condominios
 with st.sidebar:
