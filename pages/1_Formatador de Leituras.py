@@ -416,7 +416,7 @@ def listar_leituras(condominio):
                 arquivo.name.replace(".txt", "")
             )
 
-    return arquivos
+    st.write(arquivos)
 
 
 
