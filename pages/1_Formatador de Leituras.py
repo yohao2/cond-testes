@@ -3,6 +3,7 @@ import openpyxl
 import dropbox
 from dados import condominios
 from io import BytesIO
+import time
 
 dbx = dropbox.Dropbox(st.secrets["DROPBOX_TOKEN"])
 
@@ -25,6 +26,8 @@ def salvar_no_dropbox(wb, nome_arquivo):
         # definindo o que fazer, writemode: para escrever o arquivo no dropbox
         mode=dropbox.files.WriteMode.add
     )
+
+    time.sleep(1)
 
 def leitura_ibiza():
     st.title('RESIDENCIAL IBIZA')
