@@ -387,7 +387,7 @@ esquerda, direita = st.columns([2,1])
 st.tilte('teste')
 
 with esquerda:
-st.tilte('teste')
+    st.tilte('teste')
 
     # selecionar condominios
     with st.sidebar:
