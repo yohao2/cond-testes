@@ -1,0 +1,368 @@
+import streamlit as st
+import openpyxl
+from dados import condominios
+
+def leitura_ibiza():
+    st.title('RESIDENCIAL IBIZA')
+    st.write(condominios['Residencial Ibiza'])
+    st.write('---')
+
+    # checkbox
+    st.write('Escolha quais planilhas gerar:')
+    checkbox_agua = st.checkbox('Água')
+    checkbox_gas = st.checkbox('Gás')
+
+    if checkbox_agua:
+        st.subheader('Água')
+
+        # definir data gas 
+        data_agua = st.date_input('Data da leitura da água:', value= None, format='DD/MM/YYYY')
+        if data_agua:
+            dia_mes_agua = data_agua.strftime("%d/%m")
+
+        # definir valor da fatura
+        fatura = st.number_input('Valor da fatura (Com multa):')
+        # definir valor da multa
+        multa = st.number_input('Valor da multa (Deixe em branco caso não haja)')
+
+    if checkbox_gas:
+        st.subheader('Gás')
+
+        # definir data gas 
+        data_gas = st.date_input('Data da leitura do gás:', value= None, format='DD/MM/YYYY')
+        if data_gas:
+            dia_mes_gas = data_gas.strftime("%d/%m")
+
+        # definir valores do bujao
+        valor_bujao_unidade = st.number_input('Digite o valor UNITÁRIO do bujãos:')
+        valor_bujao_total = st.number_input('Digite o valor TOTAL dos bujões:')
+
+    st.write('---')
+
+    # definir mes
+    mes_referencia = st.selectbox('Mês de referência', ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]).upper()
+
+
+    # definir leituras
+    leitura = st.text_area('Cole a leitura abaixo:')
+    leitura = leitura.splitlines()
+    botao_gerar = st.button('Gerar')
+
+    lista_agua = []
+    lista_gas = []
+
+    agua = 0
+    gas = 0
+
+    # formatar leituras
+    if botao_gerar:
+        for elemento in leitura:
+            if elemento == 'ÁGUA':
+                agua = 1
+            if elemento == 'GÁS':
+                gas = 1
+                agua = 0
+
+            elemento = elemento[5:]
+            
+            if elemento != '':
+                if agua == 1:
+                    elemento = elemento[:4] + ',' + elemento[4:]
+                    lista_agua.append(elemento.strip())
+                if gas == 1:
+                    elemento = elemento[:5] + ',' + elemento[5:]
+                    lista_gas.append(elemento.strip())
+
+
+        if not checkbox_agua and not checkbox_gas:
+            st.write('Selecione qual tipo de planilha gerar!')
+            st.stop()
+
+        if checkbox_agua:
+            if not data_agua or not fatura:
+                st.write('Preencha todos os campos!')
+                st.stop()
+
+        if checkbox_gas:
+            if not data_gas or not valor_bujao_unidade or not valor_bujao_total:
+                st.write('Preencha todos os campos!')
+                st.stop()
+
+        if not mes_referencia or not leitura:
+            st.write('Preencha todos os campos!')
+            st.stop()
+
+        st.write('Gerando planilhas...')
+        if checkbox_agua: planilha_agua_ibiza(dia_mes_agua, mes_referencia, fatura, multa, lista_agua)
+        if checkbox_gas: planilha_gas_ibiza(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bujao_total, lista_gas)
+
+def leitura_bali():
+    st.title('RESIDENCIAL BALI')
+    st.write(condominios['Residencial Bali'])
+    st.write('---')
+
+    # checkbox
+    st.write('Escolha quais planilhas gerar:')
+    checkbox_agua = st.checkbox('Água')
+    checkbox_gas = st.checkbox('Gás', disabled =True)
+
+    if checkbox_agua:
+        st.subheader('Água')
+
+        # definir data gas 
+        data_agua = st.date_input('Data da leitura da água:', value= None, format='DD/MM/YYYY')
+        if data_agua:
+            dia_mes_agua = data_agua.strftime("%d/%m")
+
+        # definir valor da fatura
+        fatura = st.number_input('Valor da fatura (Com multa):')
+        # definir valor da multa
+        multa = st.number_input('Valor da multa (Deixe em branco caso não haja)')
+
+    if checkbox_gas:
+        st.subheader('Gás')
+
+        # definir data gas 
+        data_gas = st.date_input('Data da leitura do gás:', value= None, format='DD/MM/YYYY')
+        if data_gas:
+            dia_mes_gas = data_gas.strftime("%d/%m")
+
+        # definir valores do bujao
+        valor_bujao_unidade = st.number_input('Digite o valor UNITÁRIO do bujãos:')
+        valor_bujao_total = st.number_input('Digite o valor TOTAL dos bujões:')
+
+    st.write('---')
+
+    # definir mes
+    mes_referencia = st.selectbox('Mês de referência', ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]).upper()
+
+
+    # definir leituras
+    leitura = st.text_area('Cole a leitura abaixo:')
+    leitura = leitura.splitlines()
+    botao_gerar = st.button('Gerar')
+
+    lista_agua = []
+    lista_gas = []
+
+    agua = 0
+    gas = 0
+
+    # formatar leituras
+    if botao_gerar:
+        for elemento in leitura:
+            if elemento == 'ÁGUA':
+                agua = 1
+            if elemento == 'GÁS':
+                gas = 1
+                agua = 0
+
+            elemento = elemento[5:]
+            
+            if elemento != '':
+                if agua == 1:
+                    elemento = elemento[:4] + ',' + elemento[4:]
+                    lista_agua.append(elemento.strip())
+                if gas == 1:
+                    elemento = elemento[:5] + ',' + elemento[5:]
+                    lista_gas.append(elemento.strip())
+
+
+        if not checkbox_agua and not checkbox_gas:
+            st.write('Selecione qual tipo de planilha gerar!')
+            st.stop()
+
+        if checkbox_agua:
+            if not data_agua or not fatura:
+                st.write('Preencha todos os campos!')
+                st.stop()
+
+        if checkbox_gas:
+            if not data_gas or not valor_bujao_unidade or not valor_bujao_total:
+                st.write('Preencha todos os campos!')
+                st.stop()
+
+        if not mes_referencia or not leitura:
+            st.write('Preencha todos os campos!')
+            st.stop()
+
+        st.write('Gerando planilhas...')
+        if checkbox_agua: planilha_agua_bali(dia_mes_agua, mes_referencia, fatura, multa, lista_agua)
+        if checkbox_gas: planilha_gas_bali(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bujao_total, lista_gas)
+
+def planilha_agua_ibiza(dia_mes_agua, mes_referencia, fatura, multa, lista_agua):
+    wb = openpyxl.load_workbook('arquivos/AGUA IBIZA.xlsx')
+    sheet = wb['AGUA']
+
+    # dia do mes
+    sheet.cell(row= 2, column = 5).value =  dia_mes_agua
+    # mes de referencia
+    sheet.cell(row=3, column = 5).value = mes_referencia
+    # valor da fatura
+    if multa:
+        sheet.cell(row=27, column = 5).value = fatura - multa
+        # valor da multa
+        sheet.cell(row=27, column = 7).value = (f'{fatura} - {multa} DE MULTA')
+        
+    else: 
+        sheet.cell(row=27, column = 5).value = fatura
+        sheet.cell(row=27, column = 7).value = 'SEM MULTA'
+
+
+
+    # leitura anterior 
+    for linha in sheet.iter_rows(min_row=5, max_row = 25, values_only = False):
+        linha[1].value = linha[2].value
+
+    # mes de referencia
+    sheet.cell(row=5,column=3).value = mes_referencia
+
+    # data leitura
+    sheet.cell(row = 6, column = 3).value = dia_mes_agua
+
+    # leitura atual
+    for i, valor in enumerate(lista_agua, start= 7):
+        sheet.cell(row=i, column = 3).value = valor
+
+    # calculo consumo
+    for linha in sheet.iter_rows(min_row = 7, max_row = 25):
+        linha[3].value = int(linha[2].value.replace(',','')) - int(linha[1].value.replace(',',''))
+
+        linha[3].value = linha[3].value / 1000
+
+    # verificar valor maior que 5m³
+    for linha in sheet.iter_rows(min_row =7, max_row = 25,values_only = False):
+        if int(linha[3].value) >= 5:
+            linha[5].value = 'MAIOR QUE 5m³'
+
+    # mudar nome da sheet
+    wb['AGUA'].title = (mes_referencia)
+    wb.save('AGUA IBIZA FORMATADO.xlsx')
+
+def planilha_gas_ibiza(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bujao_total, lista_gas):
+    wb = openpyxl.load_workbook('arquivos/GAS IBIZA.xlsx')
+    sheet = wb['GAS']
+
+    # dia do mes
+    sheet.cell(row= 2, column = 6).value =  dia_mes_gas
+    # mes de referencia
+    sheet.cell(row=3, column = 6).value = mes_referencia
+    # valor por bujão
+    sheet.cell(row=7, column = 9).value = valor_bujao_unidade
+    # valor da dos bujoes
+    sheet.cell(row=27, column = 6).value =  valor_bujao_total
+
+    # leitura anterior 
+    for linha in sheet.iter_rows(min_row=5, max_row = 25, values_only = False):
+        linha[1].value = linha[2].value
+    # mes de referencia
+    sheet.cell(row=5,column=3).value = mes_referencia
+    # data leitura
+    sheet.cell(row = 6, column = 3).value = dia_mes_gas
+    # leitura atual
+    for i, valor in enumerate(lista_gas, start= 7):
+        sheet.cell(row=i, column = 3).value = valor
+
+    # mudar nome da sheet
+    wb['GAS'].title = (mes_referencia)
+    wb.save('GAS IBIZA FORMATADO.xlsx')
+
+def planilha_agua_bali(dia_mes_agua, mes_referencia, fatura, multa, lista_agua):
+    wb = openpyxl.load_workbook('arquivos/AGUA BALI.xlsx')
+    sheet = wb['AGUA']
+
+    # dia do mes
+    sheet.cell(row= 2, column = 5).value =  dia_mes_agua
+    # mes de referencia
+    sheet.cell(row=3, column = 5).value = mes_referencia
+    # valor da fatura
+    if multa:
+        sheet.cell(row=28, column = 5).value = fatura - multa
+        # valor da multa
+        sheet.cell(row=28, column = 7).value = (f'{fatura} - {multa} DE MULTA')
+        
+    else: 
+        sheet.cell(row=28, column = 5).value = fatura
+        sheet.cell(row=28, column = 7).value = 'SEM MULTA'
+
+
+
+    # leitura anterior 
+    for linha in sheet.iter_rows(min_row=5, max_row = 26, values_only = False):
+        linha[1].value = linha[2].value
+
+    # mes de referencia
+    sheet.cell(row=5,column=3).value = mes_referencia
+
+    # data leitura
+    sheet.cell(row = 6, column = 3).value = dia_mes_agua
+
+    # leitura atual
+    for i, valor in enumerate(lista_agua, start= 7):
+        sheet.cell(row=i, column = 3).value = valor
+
+    # calculo consumo
+    for linha in sheet.iter_rows(min_row = 7, max_row = 26):
+        linha[3].value = int(linha[2].value.replace(',','')) - int(linha[1].value.replace(',',''))
+
+        linha[3].value = linha[3].value / 1000
+
+    # verificar valor maior que 5m³
+    for linha in sheet.iter_rows(min_row =7, max_row = 26,values_only = False):
+        if int(linha[3].value) >= 5:
+            linha[5].value = 'MAIOR QUE 5m³'
+
+    # mudar nome da sheet
+    wb['AGUA'].title = (mes_referencia)
+    wb.save('AGUA BALI FORMATADO.xlsx')
+
+def planilha_gas_bali(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bujao_total, lista_gas):
+    wb = openpyxl.load_workbook('arquivos/GAS BALI.xlsx')
+    sheet = wb['GAS']
+
+    # dia do mes
+    sheet.cell(row= 2, column = 6).value =  dia_mes_gas
+    # mes de referencia
+    sheet.cell(row=3, column = 6).value = mes_referencia
+    # valor por bujão
+    sheet.cell(row=7, column = 9).value = valor_bujao_unidade
+    # valor da dos bujoes
+    sheet.cell(row=28, column = 6).value =  valor_bujao_total
+
+    # leitura anterior 
+    for linha in sheet.iter_rows(min_row=5, max_row = 26, values_only = False):
+        linha[1].value = linha[2].value
+    # mes de referencia
+    sheet.cell(row=5,column=3).value = mes_referencia
+    # data leitura
+    sheet.cell(row = 6, column = 3).value = dia_mes_gas
+    # leitura atual
+    for i, valor in enumerate(lista_gas, start= 7):
+        sheet.cell(row=i, column = 3).value = valor
+
+    # mudar nome da sheet
+    wb['GAS'].title = (mes_referencia)
+    wb.save('GAS BALI FORMATADO.xlsx')
+
+# selecionar condominios
+with st.sidebar:
+    escolher_condominio = st.selectbox('Selecione um Condomínio', condominios, index = None, placeholder= '...')
+
+# aviso condominio nao selecionado
+if not escolher_condominio:
+    st.title('SELECIONE UM CONDOMÍNIO!')
+    st.stop()
+
+# funcoes para chamar condominio
+funcoes = {
+    'Residencial Ibiza': leitura_ibiza,
+    'Residencial Bali': leitura_bali
+}
+
+# rodar condominio selecionado
+if escolher_condominio in funcoes:
+    funcoes[escolher_condominio]()
+
+
+
+
