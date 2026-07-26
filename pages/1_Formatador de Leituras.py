@@ -416,8 +416,7 @@ def listar_leituras(condominio):
                 arquivo.name.replace(".txt", "")
             )
 
-    st.write(arquivos)
-
+    return arquivos
 
 
 st.set_page_config(layout="wide")
@@ -451,7 +450,11 @@ with direita:
     with centro:
         st.subheader('Leituras Anteriores')
 
-        listar_leituras(escolher_condominio)
+        arquivos = listar_leituras(escolher_condominio)
+
+        st.write(arquivos)
+
+
 
 
         nova_leitura = st.text_area('Salvar nova leitura:')
