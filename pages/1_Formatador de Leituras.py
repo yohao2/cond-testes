@@ -405,6 +405,7 @@ with esquerda:
     if escolher_condominio in funcoes:
         funcoes[escolher_condominio]()
 
-
+with direita:
+    st.subheader('Leituras Anteriores')
 
 
