@@ -451,6 +451,8 @@ with direita:
         st.subheader('Leituras Anteriores')
 
         arquivos = listar_leituras(escolher_condominio)
+        if not arquivos:
+            st.write('Nenhuma Leitura Salva...')
 
         for arquivo in arquivos:
             st.markdown(
@@ -468,13 +470,15 @@ with direita:
             )
 
 
-            
-        nova_leitura = st.text_area('Salvar nova leitura:')
-        nome_leitura = st.text_input('Nome do arquivo:')
+
         salvar_leitura = st.button('Salvar')
 
         if salvar_leitura:
-            if not nome_leitura or not nome_leitura:
+            nova_leitura = st.text_area('Salvar nova leitura:')
+            nome_leitura = st.text_input('Nome do arquivo:')
+
+
+            if not nome_leitura or not nova_leitura:
                 st.write('Preencha todos os campos!')
                 st.stop()
             salvar_leitura_nuvem(nome_leitura, nova_leitura, escolher_condominio)
