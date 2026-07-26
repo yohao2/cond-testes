@@ -406,6 +406,9 @@ with esquerda:
         funcoes[escolher_condominio]()
 
 with direita:
-    st.subheader('Leituras Anteriores')
+    espaco1, centro, espaco2 = st.columns([1, 2, 1])
+
+    with centro:
+        st.subheader('Leituras Anteriores')
 
 
