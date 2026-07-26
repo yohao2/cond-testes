@@ -380,24 +380,28 @@ def planilha_gas_bali(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bu
     wb['GAS'].title = (mes_referencia)
     salvar_no_dropbox(wb, f'B. /{nome_arquivo}.xlsx')
 
-# selecionar condominios
-with st.sidebar:
-    escolher_condominio = st.selectbox('Selecione um Condomínio', condominios, index = None, placeholder= '...')
+esquerda, direita = st.columns(2)
 
-# aviso condominio nao selecionado
-if not escolher_condominio:
-    st.title('SELECIONE UM CONDOMÍNIO!')
-    st.stop()
+with esquerda:
 
-# funcoes para chamar condominio
-funcoes = {
-    'Residencial Ibiza': leitura_ibiza,
-    'Residencial Bali': leitura_bali
-}
+    # selecionar condominios
+    with st.sidebar:
+        escolher_condominio = st.selectbox('Selecione um Condomínio', condominios, index = None, placeholder= '...')
 
-# rodar condominio selecionado
-if escolher_condominio in funcoes:
-    funcoes[escolher_condominio]()
+    # aviso condominio nao selecionado
+    if not escolher_condominio:
+        st.title('SELECIONE UM CONDOMÍNIO!')
+        st.stop()
+
+    # funcoes para chamar condominio
+    funcoes = {
+        'Residencial Ibiza': leitura_ibiza,
+        'Residencial Bali': leitura_bali
+    }
+
+    # rodar condominio selecionado
+    if escolher_condominio in funcoes:
+        funcoes[escolher_condominio]()
 
 
 
