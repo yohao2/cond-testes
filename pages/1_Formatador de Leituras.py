@@ -453,10 +453,19 @@ with direita:
         arquivos = listar_leituras(escolher_condominio)
 
         for arquivo in arquivos:
-            with st.container(border=True):
-                st.write(arquivo)
-
-
+            st.markdown(
+                f"""
+                <div style="
+                    border:1px solid #ccc;
+                    border-radius:10px;
+                    padding:10px;
+                    margin:5px;
+                ">
+                📄 {arquivo}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
         nova_leitura = st.text_area('Salvar nova leitura:')
         nome_leitura = st.text_input('Nome do arquivo:')
         salvar_leitura = st.button('Salvar')
