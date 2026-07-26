@@ -380,6 +380,16 @@ def planilha_gas_bali(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bu
     wb['GAS'].title = (mes_referencia)
     salvar_no_dropbox(wb, f'B. /{nome_arquivo}.xlsx')
 
+
+def salvar_leitura_nuvem(nome_arquivo, texto):
+
+    dbx.files_upload(
+        texto.encode("utf-8"),
+        f"/Leituras/{nome_arquivo}.txt",
+        mode=dropbox.files.WriteMode.overwrite
+    )
+
+
 st.set_page_config(layout="wide")
 
 esquerda, direita = st.columns([2,1])
@@ -410,5 +420,13 @@ with direita:
 
     with centro:
         st.subheader('Leituras Anteriores')
+
+        nova_leitura = st.text_area('Salvar nova leitura:')
+        nome_leitura = st.text_input('Nome do arquivo:')
+        salvar_leitura = st.button('Salvar')
+
+        if salvar_leitura:
+            salvar_leitura_nuvem(nome_leitura, nova_leitura)
+            
 
 
