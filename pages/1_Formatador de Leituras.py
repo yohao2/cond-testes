@@ -472,15 +472,14 @@ with direita:
         salvar_leitura = st.button('Nova Leitura')
 
         if salvar_leitura:
-            nova_leitura = st.text_area('Salvar nova leitura:')
+            nova_leitura = st.text_area('Leitura:')
             nome_leitura = st.text_input('Nome do arquivo:')
             cadastrar_nova_leitura = st.button('Salvar')
 
             if cadastrar_nova_leitura:
                 if not nome_leitura or not nova_leitura:
                     st.write('Preencha todos os campos!')
-                    st.stop()
-                    salvar_leitura_nuvem(nome_leitura, nova_leitura, escolher_condominio)
+                else: salvar_leitura_nuvem(nome_leitura, nova_leitura, escolher_condominio)
                 
 
 
