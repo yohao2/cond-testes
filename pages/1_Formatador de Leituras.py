@@ -457,15 +457,18 @@ with direita:
                 f"""
                 <div style="
                     border:1px solid #ccc;
-                    border-radius:10px;
-                    padding:10px;
-                    margin:5px;
+                    border-radius:8px;
+                    padding:3px 8px;
+                    margin:2px;
                 ">
                 📄 {arquivo}
                 </div>
                 """,
                 unsafe_allow_html=True
             )
+
+
+            
         nova_leitura = st.text_area('Salvar nova leitura:')
         nome_leitura = st.text_input('Nome do arquivo:')
         salvar_leitura = st.button('Salvar')
