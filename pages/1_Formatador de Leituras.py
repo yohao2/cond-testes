@@ -469,17 +469,30 @@ with direita:
                 unsafe_allow_html=True
             )
 
-        salvar_leitura = st.button('Nova Leitura')
+        if "nova_leitura_aberta" not in st.session_state:
+            st.session_state.nova_leitura_aberta = False
 
-        if salvar_leitura:
-            nova_leitura = st.text_area('Leitura:')
-            nome_leitura = st.text_input('Nome do arquivo:')
-            cadastrar_nova_leitura = st.button('Salvar')
 
-            if cadastrar_nova_leitura:
+        if st.button("Nova Leitura"):
+            st.session_state.nova_leitura_aberta = True
+
+
+        if st.session_state.nova_leitura_aberta:
+
+            nova_leitura = st.text_area("Leitura:")
+            nome_leitura = st.text_input("Nome do arquivo:")
+
+            if st.button("Salvar"):
+
                 if not nome_leitura or not nova_leitura:
-                    st.write('Preencha todos os campos!')
-                else: salvar_leitura_nuvem(nome_leitura, nova_leitura, escolher_condominio)
-                
+                    st.write("Preencha todos os campos!")
 
+                else:
+                    salvar_leitura_nuvem(
+                        nome_leitura,
+                        nova_leitura,
+                        escolher_condominio
+                    )
+
+                    st.success("Leitura salva!")
 
