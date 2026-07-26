@@ -380,7 +380,6 @@ def planilha_gas_bali(dia_mes_gas, mes_referencia, valor_bujao_unidade, valor_bu
     wb['GAS'].title = (mes_referencia)
     salvar_no_dropbox(wb, f'B. /{nome_arquivo}.xlsx')
 
-
 def salvar_leitura_nuvem(nome_arquivo, texto, condominio):
 
     if condominio == 'Residencial Ibiza':
@@ -395,6 +394,30 @@ def salvar_leitura_nuvem(nome_arquivo, texto, condominio):
             f"/Leituras/Bali/{nome_arquivo}.txt",
             mode=dropbox.files.WriteMode.overwrite
         )
+
+def listar_leituras(condominio):
+
+    if condominio == "Residencial Ibiza":
+        pasta = "/Leituras/Ibiza"
+
+    elif condominio == "Residencial Bali":
+        pasta = "/Leituras/Bali"
+
+    else:
+        return []
+
+    resultado = dbx.files_list_folder(pasta)
+
+    arquivos = []
+
+    for arquivo in resultado.entries:
+        if arquivo.name.endswith(".txt"):
+            arquivos.append(
+                arquivo.name.replace(".txt", "")
+            )
+
+    return arquivos
+
 
 
 st.set_page_config(layout="wide")
@@ -427,6 +450,9 @@ with direita:
 
     with centro:
         st.subheader('Leituras Anteriores')
+
+        listar_leituras(escolher_condominio)
+
 
         nova_leitura = st.text_area('Salvar nova leitura:')
         nome_leitura = st.text_input('Nome do arquivo:')
