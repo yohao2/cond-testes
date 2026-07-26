@@ -462,7 +462,7 @@ with direita:
         salvar_leitura = st.button('Salvar')
 
         if salvar_leitura:
-            if not nome_leitura or nome_leitura:
+            if not nome_leitura or not nome_leitura:
                 st.write('Preencha todos os campos!')
                 st.stop()
             salvar_leitura_nuvem(nome_leitura, nova_leitura, escolher_condominio)
