@@ -480,7 +480,7 @@ with direita:
                 if not nome_leitura or not nova_leitura:
                     st.write('Preencha todos os campos!')
                     st.stop()
-                salvar_leitura_nuvem(nome_leitura, nova_leitura, escolher_condominio)
+                    salvar_leitura_nuvem(nome_leitura, nova_leitura, escolher_condominio)
                 
 
 
