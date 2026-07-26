@@ -452,9 +452,8 @@ with direita:
 
         arquivos = listar_leituras(escolher_condominio)
 
-        st.write(arquivos)
-
-
+        for aquivo in arquivos:
+            st.write(arquivo)
 
 
         nova_leitura = st.text_area('Salvar nova leitura:')
@@ -462,6 +461,9 @@ with direita:
         salvar_leitura = st.button('Salvar')
 
         if salvar_leitura:
+            if not nome_leitura or nome_leitura:
+                st.write('Preencha todos os campos!')
+                st.stop()
             salvar_leitura_nuvem(nome_leitura, nova_leitura, escolher_condominio)
             
 
