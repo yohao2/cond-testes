@@ -30,7 +30,6 @@ def salvar_no_dropbox(wb, nome_arquivo):
     time.sleep(1)
 
 def leitura_ibiza():
-    
     st.title('RESIDENCIAL IBIZA')
     st.write(condominios['Residencial Ibiza'])
     st.write('---')
@@ -55,21 +54,19 @@ def leitura_ibiza():
         # definir nome do arquivo
         nome_arquivo_agua = st.text_input('Digite o nome que quer dar para o arquivo: ')
 
-    with direita:
+    if checkbox_gas:
+        st.subheader('Gás')
 
-        if checkbox_gas:
-            st.subheader('Gás')
+        # definir data gas 
+        data_gas = st.date_input('Data da leitura do gás:', value= None, format='DD/MM/YYYY')
+        if data_gas:
+            dia_mes_gas = data_gas.strftime("%d/%m")
 
-            # definir data gas 
-            data_gas = st.date_input('Data da leitura do gás:', value= None, format='DD/MM/YYYY')
-            if data_gas:
-                dia_mes_gas = data_gas.strftime("%d/%m")
-
-            # definir valores do bujao
-            valor_bujao_unidade = st.number_input('Digite o valor UNITÁRIO do bujãos:')
-            valor_bujao_total = st.number_input('Digite o valor TOTAL dos bujões:')
-            # definir nome do arquivo
-            nome_arquivo_gas = st.text_input('Digite o nome que quer dar para o arquivo:')
+        # definir valores do bujao
+        valor_bujao_unidade = st.number_input('Digite o valor UNITÁRIO do bujãos:')
+        valor_bujao_total = st.number_input('Digite o valor TOTAL dos bujões:')
+        # definir nome do arquivo
+        nome_arquivo_gas = st.text_input('Digite o nome que quer dar para o arquivo:')
 
     st.write('---')
 
@@ -387,7 +384,10 @@ st.set_page_config(layout="wide")
 
 esquerda, direita = st.columns([2,1])
 
+st.tilte('teste')
+
 with esquerda:
+st.tilte('teste')
 
     # selecionar condominios
     with st.sidebar:
