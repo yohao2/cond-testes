@@ -453,7 +453,8 @@ with direita:
         arquivos = listar_leituras(escolher_condominio)
 
         for arquivo in arquivos:
-            st.write(arquivo)
+            with st.container(border=True):
+                st.write(arquivo)
 
 
         nova_leitura = st.text_area('Salvar nova leitura:')
