@@ -6,9 +6,9 @@ from io import BytesIO
 import time
 
 dbx = dropbox.Dropbox(
-    oauth2_refresh_token="SEU_REFRESH_TOKEN",
-    app_key="SUA_APP_KEY",
-    app_secret="SEU_APP_SECRET"
+    oauth2_refresh_token=st.secrets["DROPBOX_REFRESH_TOKEN"],
+    app_key=st.secrets["DROPBOX_APP_KEY"],
+    app_secret=st.secrets["DROPBOX_APP_SECRET"]
 )
 
 def salvar_no_dropbox(wb, nome_arquivo):
