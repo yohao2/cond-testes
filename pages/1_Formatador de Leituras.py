@@ -5,7 +5,11 @@ from dados import condominios
 from io import BytesIO
 import time
 
-dbx = dropbox.Dropbox(st.secrets["DROPBOX_TOKEN"])
+dbx = dropbox.Dropbox(
+    oauth2_refresh_token="SEU_REFRESH_TOKEN",
+    app_key="SUA_APP_KEY",
+    app_secret="SEU_APP_SECRET"
+)
 
 def salvar_no_dropbox(wb, nome_arquivo):
     # definindo bytesIO() como arquivo
